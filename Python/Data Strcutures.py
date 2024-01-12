@@ -5,6 +5,7 @@
 # fruit = "banana"
 # "bn" in fruit
 
+#Assignment 6.5
 text = "X-DSPAM-Confidence:    0.8475"
 fpos = text.find("0")
 lpos=len(text)
