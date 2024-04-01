@@ -11,7 +11,7 @@ sums = 0
 while True:
     url = input("Enter URL:")
     if len(url)<1: break
-
+    
     try:
         data = urllib.request.urlopen(url).read()
         parser = json.loads(data)['comments']
@@ -20,12 +20,4 @@ while True:
             sums = sums + item
         print("Sum of Comments:", sums)
     except:
-        parser = None
-        try:
-            if not parser or ['comments'] not in parser:
-                print("=== Download Error ===")
-        except:    
-            if len(parser['comments']) == 0:
-                print('=== Object Not Found ===')
-        
-
+        print('Invalid URL')
