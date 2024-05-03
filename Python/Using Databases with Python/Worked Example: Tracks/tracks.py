@@ -1,7 +1,69 @@
+import os
 import sqlite3
-conn = sqlite3.connect('track.sqlite')
+
+path = '/workspaces/Coding/Python/Using Databases with Python/Worked Example: Tracks/Tracks.sqlite'
+if os.path.exists(path):
+    os.remove(path)
+
+conn = sqlite3.connect('/workspaces/Coding/Python/Using Databases with Python/Worked Example: Tracks/Tracks.sqlite')
 cur = conn.cursor()
-cur.execute('DROP TABLE IF EXISTS ARTIST',
-            'DROP TABLE IF EXISTS ALBUM',
-            'DROP TABLE IF EXISTS TRACKS',
-            'DROP TABLE IF EXISTS GENRE')
+cur.executescript('''
+            DROP TABLE IF EXISTS Artist;
+            DROP TABLE IF EXISTS Album;
+            DROP TABLE IF EXISTS Tracks;
+            DROP TABLE IF EXISTS Genre''')
+
+cur.executescript('''CREATE TABLE Artist(
+            id INTEGER PRIMARY KEY,
+            name TEXT UNIQUE
+            );
+
+            CREATE TABLE Album(
+            id INTEGER PRIMARY KEY,
+            head TEXT UNIQUE,
+            artist_id INTEGER
+            );
+
+            CREATE TABLE Tracks(
+            id INTEGER PRIMARY KEY,
+            title TEXT UNIQUE,
+            album_id INTEGER,
+            genre_id Integer,
+            rating INTEGER, len INTEGER, count INTEGER
+            );
+
+            CREATE TABLE Genre(
+            id INTEGER PRIMARY KEY,
+            categ TEXT UNIQUE
+            );
+''')
+
+fhandle = open('/workspaces/Coding/Python/Using Databases with Python/Worked Example: Tracks/tracks.csv')
+for line in fhandle:
+    pieces = line.split(',')
+    if len(pieces) != 7: continue
+    
+    tracks = pieces[0]
+    artist = pieces[1]
+    album = pieces[2]
+    count = pieces[3]
+    rating = pieces[4]
+    length = pieces[5]
+    genre = pieces[6]
+    print(tracks, artist, album, count, rating, length, genre)
+
+    cur.execute('INSERT OR IGNORE INTO Artist(name) VALUES(?)',(artist,))
+    cur.execute('SELECT id FROM Artist WHERE name = ?',(artist,))
+    artist_id = cur.fetchone()[0]
+
+    cur.execute('INSERT OR IGNORE INTO Album(head, artist_id) VALUES(?, ?)',(album, artist_id))
+    cur.execute('SELECT id from Album WHERE head = ?',(album,))
+    album_id = cur.fetchone()[0]
+
+    cur.execute('INSERT OR IGNORE INTO Genre(categ) VALUES(?)',(genre,))
+    cur.execute('SELECT id from Genre WHERE categ = ?''',(genre,))
+    genre_id = cur.fetchone()[0]
+
+    cur.execute('INSERT OR IGNORE INTO Tracks(title, album_id, genre_id, rating, len, count) VALUES(?, ?, ?, ?, ?, ?)',(tracks, album_id, genre_id, rating, length, count))
+    
+conn.commit()    
