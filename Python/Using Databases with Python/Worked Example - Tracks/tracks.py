@@ -32,10 +32,10 @@ cur.executescript('''CREATE TABLE Artist(
             rating INTEGER, len INTEGER, count INTEGER
             );
 
-            CREATE TABLE Genre(
+`            CREATE TABLE Genre(
             id INTEGER PRIMARY KEY,
             categ TEXT UNIQUE
-            );
+            );`
 ''')
 
 fhandle = open('/workspaces/Coding/Python/Using Databases with Python/Worked Example - Tracks/tracks.csv')
@@ -64,6 +64,6 @@ for line in fhandle:
     # cur.execute('SELECT id from Genre WHERE categ = ?''',(genre,))
     # genre_id = cur.fetchone()[0]
 
-    cur.execute('INSERT OR IGNORE INTO Tracks(title, album_id, genre, rating, len, count) VALUES(?, ?, ?, ?, ?, ?)',(tracks, album, genre, rating, length, count))
+    cur.execute('INSERT OR IGNORE INTO Tracks(title, album, artist, genre, rating, len, count) VALUES(?, ?, ?, ?, ?, ?,?)',(tracks, album, artist, genre, rating, length, count))
     
 conn.commit()    
