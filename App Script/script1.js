@@ -1,4 +1,4 @@
-function dataExtraction() {
+jufunction dataExtraction() {
   // Specify the name of the top-level folder
   var folderName = "#Fielding Managing";
 
