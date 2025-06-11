@@ -1,3 +1,4 @@
+
 import json
 import sqlite3
 
@@ -28,9 +29,9 @@ CREATE TABLE Member (
 )
 ''')
 
-# fname = input('Enter file name: ')
-# if len(fname) < 1:
-fname = 'Coursera/Using Databases with Python/Assignment 16 - Many Relationships/roster_data.json'
+fname = input('Enter file name: ')
+if len(fname) < 1:
+    fname = 'roster_data.json'
 
 # [
 #   [ "Charley", "si110", 1 ],
@@ -45,7 +46,7 @@ for entry in json_data:
     title = entry[1]
     role = entry[2]
 
-    print(name, title)
+    print(name, title, role)
 
     cur.execute('''INSERT OR IGNORE INTO User (name)
         VALUES ( ? )''', (name, ))
@@ -57,8 +58,7 @@ for entry in json_data:
     cur.execute('SELECT id FROM Course WHERE title = ? ', (title, ))
     course_id = cur.fetchone()[0]
 
-    cur.execute('''INSERT OR REPLACE INTO Member
-        (user_id, course_id, role) VALUES ( ?, ?, ? )''',
-        (user_id, course_id, role))
+    cur.execute('''INSERT OR REPLACE INTO Member (user_id, course_id, role)
+        VALUES ( ?, ?, ? )''', (user_id, course_id, role))
 
     conn.commit()
